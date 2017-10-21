@@ -11,7 +11,7 @@ import psycopg2
 
 
 key = os.environ['MAILGUNKEY']
-request_url = 'https://api.mailgun.net/v3/www.carpoolvote.com/messages'
+request_url = "https://api.mailgun.net/v3/{0}/messages".format(os.environ['MAILGUN_DOMAIN'])
 
 try:
 	conn = psycopg2.connect("dbname={0}".format(sys.argv[1]))
@@ -28,7 +28,7 @@ for row in rows:
 	print (row[1] + ' ' + row[2] + '\n' + row[3] + '\n')
 
 	request = requests.post(request_url, auth=('api', key), data={
-		'from': 'Carpool Vote <noreply@carpoolvote.com>',
+		'from': "Carpool Vote <{0}>".format(os.environ['FROM_EMAIL']),
 		'to': row[1],
 		'subject': row[2],
 		'html': row[3]
